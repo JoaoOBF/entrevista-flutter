@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:myapp/core/api/api_response/api_response.dart';
+import 'package:myapp/core/client/client.dart';
 
 class RequestApiProvider {
-  Dio client;
+  Client client;
   RequestApiProvider(this.client);
 
   Future<ApiResponse> post(
@@ -13,7 +14,7 @@ class RequestApiProvider {
     Response response;
 
     try {
-      response = await client.post(url, data: objeto);
+      response = await client.dio.post(url, data: objeto);
       if (response.data != null && (response.statusCode == 200)) {
         return Success();
       }
@@ -25,13 +26,13 @@ class RequestApiProvider {
     return null;
   }
 
-  Future<ApiResponse> getFrom(
+  Future<ApiResponse> get(
     String url,
   ) async {
     Response response;
 
     try {
-      response = await client.get(
+      response = await client.dio.get(
         url,
       );
 
