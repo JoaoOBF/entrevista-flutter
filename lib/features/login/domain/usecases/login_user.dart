@@ -15,7 +15,6 @@ class LoginUserImpl implements LoginUser {
 
   @override
   Future<Either<Failure, Token>> login(LoginModel loginModel) async {
-    // TODO: implement login
-    throw UnimplementedError();
+    return await repository.login(loginModel);
   }
 }
