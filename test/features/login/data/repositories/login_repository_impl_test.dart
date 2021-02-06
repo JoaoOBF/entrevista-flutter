@@ -29,6 +29,6 @@ main() {
  LoginModel loginModel =
         LoginModel(userName: 'teste', password: '123456');
     var result = await repository.login(loginModel);
-    expect(result.fold(id, id), isA<Exception>());
+    expect(result.fold(id, id), isA<Failure>());
   });
 }
