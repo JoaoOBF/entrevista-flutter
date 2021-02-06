@@ -6,12 +6,16 @@ import 'package:myapp/features/login/domain/entities/token.dart';
 import 'package:myapp/features/login/domain/repositories/login_repository.dart';
 
 class LoginRepositoryImpl implements LoginRepository {
-
   final LoginDataSource datasource;
   LoginRepositoryImpl(this.datasource);
 
   @override
-   Future<Either<Failure, Token>> login(LoginModel loginModel) async {
-    return await datasource.login(loginModel);
+  Future<Either<Failure, Token>> login(LoginModel loginModel) async {
+    try {
+      final result = await datasource.login(loginModel);
+      return Right(result);
+    } catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
   }
 }

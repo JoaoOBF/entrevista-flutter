@@ -9,7 +9,7 @@ import 'package:myapp/features/login/data/models/token_model.dart';
 import 'package:myapp/features/login/domain/entities/token.dart';
 
 abstract class LoginDataSource {
-  Future<Either<Failure, Token>> login(LoginModel loginModel);
+  Future<Token> login(LoginModel loginModel);
 }
 
 class LoginDataSourceImpl implements LoginDataSource {
@@ -18,14 +18,14 @@ class LoginDataSourceImpl implements LoginDataSource {
   LoginDataSourceImpl({@required this.client});
 
   @override
-  Future<Either<Failure, Token>> login(LoginModel loginModel) async {
+  Future<Token> login(LoginModel loginModel) async {
     final url = '/user/login';
     ApiResponse response = await client.post(url, loginModel.toJson());
 
     if (response is Success) {
-      return Right(TokenModel.fromJson(response.data));
+      return TokenModel.fromJson(response.data);
     } else {
-      return Left(response);
+      throw Exception('credenciais erradas');
     }
   }
 }
