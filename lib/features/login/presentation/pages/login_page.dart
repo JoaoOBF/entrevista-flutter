@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:myapp/core/injection/injection.dart';
 import 'package:myapp/core/styles/app_colors.dart';
 import 'package:myapp/core/styles/app_icons.dart';
+import 'package:myapp/features/login/presentation/store/login_controller.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -10,6 +13,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  LoginController _controller;
+
+  @override
+  void initState() {
+    _controller = injection<LoginController>();
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,8 +90,9 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(
             height: 15,
           ),
-          _field(TextEditingController(), "Seu email", "Ex: test@email"),
-          _field(TextEditingController(), "Sua senha", "123"),
+          _field("Seu nick", "Ex: joao otavio",
+              onChanged: _controller.onChangeUsername),
+          _field("Sua senha", "123", onChanged: _controller.onChangePassword),
           SizedBox(
             height: 30,
           ),
@@ -89,21 +102,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _field(TextEditingController controller, String labelText, String hintText,
+  _field(String labelText, String hintText,
       {TextInputType keyboardType, void Function(String) onChanged}) {
     return Padding(
       padding: const EdgeInsets.only(top: 15.0),
       child: Theme(
         data: ThemeData(primaryColor: AppColors.verde),
-        child: TextFormField(
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Preencha o campo para continuar';
-            }
-            return null;
-          },
+        child: TextField(
           cursorColor: AppColors.verde,
-          controller: controller,
           keyboardType: keyboardType,
           onChanged: onChanged,
           style: TextStyle(color: AppColors.hint),
@@ -129,20 +135,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _buttom() {
-    return InkWell(
-      child: new Container(
-          width: MediaQuery.of(context).size.width,
-          height: 45,
-          decoration: BoxDecoration(
-            color: AppColors.verde,
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-          ),
-          child: Center(
-              child: Text('ENTRAR',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16)))),
-    );
+    return Observer(builder: (_) {
+      return InkWell(
+         onTap: () => _controller.isValid ? _controller.login() : null,
+        child: new Container(
+            width: MediaQuery.of(context).size.width,
+            height: 45,
+            decoration: BoxDecoration(
+              color:_controller.isValid ? AppColors.verde : AppColors.hint,
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            ),
+            child: Center(
+                child: Text('ENTRAR',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16)))),
+      );
+    });
   }
 }

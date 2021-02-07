@@ -16,11 +16,11 @@ class RequestApiProvider {
     try {
       response = await client.dio.post(url, data: objeto);
       if (response.data != null && (response.statusCode == 200)) {
-        return Success();
+        return Success(data: response.data);
       }
     } catch (e, stacktrace) {
       print("catch" + e.toString());
-      return Failure();
+      return Failure(message: 'erro generico');
     }
 
     return null;

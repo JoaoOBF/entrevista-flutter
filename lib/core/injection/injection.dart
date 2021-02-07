@@ -6,22 +6,31 @@ import 'package:myapp/features/login/data/datasources/login_datasource.dart';
 import 'package:myapp/features/login/data/repositories/login_repository_impl.dart';
 import 'package:myapp/features/login/domain/repositories/login_repository.dart';
 import 'package:myapp/features/login/domain/usecases/login_user.dart';
+import 'package:myapp/features/login/presentation/store/login_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final injection = GetIt.instance;
 
 Future<void> init() async {
-  injection.registerLazySingleton(() => LoginUserImpl(injection()));
-
-  // Repository
+  
+  injection.registerFactory(
+    () => LoginController(injection()),
+  );
+   // Repository
   injection.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(injection()),
   );
 
+
+  injection.registerLazySingleton<LoginUser>(() => LoginUserImpl(injection()));
+
+ 
   // Data sources
   injection.registerLazySingleton<LoginDataSource>(
     () => LoginDataSourceImpl(client: injection()),
   );
+
+  
 
   final sharedPreferences = await SharedPreferences.getInstance();
   injection.registerLazySingleton(() => sharedPreferences);
