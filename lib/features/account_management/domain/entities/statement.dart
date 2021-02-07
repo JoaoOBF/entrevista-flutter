@@ -2,8 +2,8 @@ import 'package:myapp/features/account_management/domain/entities/other_info.dar
 
 class Statement {
   String id;
-  int amount;
-  int balance;
+  var amount;
+  var balance;
   String createdAt;
   String operationType;
   OtherInfo otherInfo;
