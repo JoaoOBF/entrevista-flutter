@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/injection/injection.dart';
 import 'package:myapp/core/routes/routes.dart';
 import 'package:myapp/core/utils/global_service.dart';
 import 'package:myapp/features/login/presentation/pages/login_page.dart';
