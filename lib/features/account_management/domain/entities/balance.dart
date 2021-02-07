@@ -1,6 +1,5 @@
 class Balance {
+  final balance;
 
-  final String balance;
- 
   Balance({this.balance});
 }
