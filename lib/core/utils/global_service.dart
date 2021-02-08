@@ -9,7 +9,9 @@ class GlobalService {
   }) async {
     Widget okButton = FlatButton(
       child: Text("OK"),
-      onPressed: () {},
+      onPressed: () {
+        pop();
+      },
     );
     // configura o  AlertDialog
     AlertDialog alerta = AlertDialog(

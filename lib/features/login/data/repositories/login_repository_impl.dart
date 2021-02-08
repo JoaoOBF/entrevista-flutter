@@ -15,7 +15,7 @@ class LoginRepositoryImpl implements LoginRepository {
       final result = await datasource.login(loginModel);
       return Right(result);
     } catch (e) {
-      return Left(Failure(message: e.toString()));
+      return Left(e);
     }
   }
 }

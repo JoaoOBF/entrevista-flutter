@@ -25,7 +25,7 @@ class LoginDataSourceImpl implements LoginDataSource {
     if (response is Success) {
       return TokenModel.fromJson(response.data);
     } else {
-      throw Exception('credenciais erradas');
+      throw response;
     }
   }
 }

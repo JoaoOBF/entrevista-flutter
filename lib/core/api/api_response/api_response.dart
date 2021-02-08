@@ -1,5 +1,7 @@
 abstract class ApiResponse {}
 
+abstract class Error implements Exception {}
+
 class Success implements ApiResponse {
   int statusCode;
   Map<String, dynamic> data;
@@ -10,7 +12,7 @@ class Success implements ApiResponse {
   });
 }
 
-class Failure implements ApiResponse {
+class Failure extends Error implements ApiResponse {
   int statusCode;
   String message;
 

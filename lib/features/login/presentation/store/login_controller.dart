@@ -43,7 +43,7 @@ abstract class _LoginControllerBase with Store {
     var result = await loginUser.login(loginCredential);
     load = false;
     result.fold((failure) {
-      print(failure);
+      GlobalService.showPopUp(mensagem: failure.message);
     }, (token) async{
       await injection<SharedPreferences>().setString("key", token.token);
       GlobalService.gotToAndRemove(router: home);

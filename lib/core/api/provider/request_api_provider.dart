@@ -19,6 +19,10 @@ class RequestApiProvider {
         return Success(data: response.data);
       }
     } catch (e, stacktrace) {
+       if (e.response != null &&
+        e.response.data is Map && e.response.data.containsKey('msg')) {
+     return Failure(message: e.response.data['msg']);
+    }
       print("catch" + e.toString());
       return Failure(message: 'erro generico');
     }
