@@ -26,18 +26,15 @@ class RequestApiProvider {
     return null;
   }
 
-  Future<ApiResponse> get(
-    String url,
-  ) async {
+  Future<ApiResponse> get(String url,
+      {Map<String, dynamic> querryParam}) async {
     Response response;
 
     try {
-      response = await client.dio.get(
-        url,
-      );
+      response = await client.dio.get(url, queryParameters: querryParam);
 
       if (response.data != null && response.statusCode == 200) {
-        return Success();
+        return Success(data: response.data);
       }
     } catch (e, stacktrace) {
       print("catch" + e.toString());

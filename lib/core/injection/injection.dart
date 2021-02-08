@@ -7,6 +7,7 @@ import 'package:myapp/features/account_management/data/repositories/account_mana
 import 'package:myapp/features/account_management/domain/repositories/account_management_repository.dart';
 import 'package:myapp/features/account_management/domain/usecases/get_user_balance.dart';
 import 'package:myapp/features/account_management/domain/usecases/get_user_statements.dart';
+import 'package:myapp/features/account_management/presentation/store/home_controller.dart';
 import 'package:myapp/features/login/data/datasources/login_datasource.dart';
 import 'package:myapp/features/login/data/repositories/login_repository_impl.dart';
 import 'package:myapp/features/login/domain/repositories/login_repository.dart';
@@ -19,6 +20,9 @@ final injection = GetIt.instance;
 Future<void> init() async {
   injection.registerFactory(
     () => LoginController(injection()),
+  );
+  injection.registerFactory(
+    () => HomeController(injection(), injection()),
   );
   injection.registerLazySingleton<LoginRepository>(
     () => LoginRepositoryImpl(injection()),

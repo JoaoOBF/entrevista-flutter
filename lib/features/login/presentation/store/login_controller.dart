@@ -1,8 +1,11 @@
 import 'package:mobx/mobx.dart';
 import 'package:myapp/core/injection/injection.dart';
+import 'package:myapp/core/utils/constants.dart';
+import 'package:myapp/core/utils/global_service.dart';
 import 'package:myapp/features/login/data/models/login_model.dart';
 import 'package:myapp/features/login/domain/repositories/login_repository.dart';
 import 'package:myapp/features/login/domain/usecases/login_user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 part 'login_controller.g.dart';
 
 class LoginController = _LoginControllerBase with _$LoginController;
@@ -41,8 +44,9 @@ abstract class _LoginControllerBase with Store {
     load = false;
     result.fold((failure) {
       print(failure);
-    }, (token) {
-      print(token);
+    }, (token) async{
+      await injection<SharedPreferences>().setString("key", token.token);
+      GlobalService.gotToAndRemove(router: home);
     });
   }
 }

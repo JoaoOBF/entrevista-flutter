@@ -1,4 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:myapp/core/injection/injection.dart';
+import 'package:myapp/features/login/data/models/login_model.dart';
+import 'package:myapp/features/login/domain/usecases/login_user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoggingInterceptor extends Interceptor {
   @override
@@ -20,9 +24,23 @@ class LoggingInterceptor extends Interceptor {
   onError(DioError e) {
     //Exception
     print("ERROR[${e?.response?.statusCode}] => PATH: ${e?.request?.path}");
+    if (e.response != null &&
+        e.response.data is Map &&
+        e.response.data['code'] == 110) {
+      login();
+    }
 
     return super.onError(e);
   }
 
+  login() async {
+    var result = await injection<LoginUser>()
+        .login(LoginModel(userName: 'testFrontEwally', password: '123456'));
 
+    result.fold((failure) {
+      print(failure);
+    }, (token) async {
+      injection<SharedPreferences>().setString("key", token.token);
+    });
+  }
 }

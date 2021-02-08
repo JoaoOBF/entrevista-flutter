@@ -4,8 +4,7 @@ import 'package:myapp/features/account_management/data/datasources/account_manag
 import 'package:myapp/features/account_management/domain/entities/balance.dart';
 import 'package:myapp/features/account_management/domain/entities/statement.dart';
 import 'package:myapp/features/account_management/domain/repositories/account_management_repository.dart';
-import 'package:myapp/features/login/data/models/login_model.dart';
-import 'package:myapp/features/login/domain/entities/token.dart';
+
 
 
 class AccountManagementImpl implements AccountManagementRepository {
@@ -24,9 +23,9 @@ class AccountManagementImpl implements AccountManagementRepository {
   }
 
   @override
-  Future<Either<Failure, List<Statement>>> getUserStatements() async{
+  Future<Either<Failure, List<Statement>>> getUserStatements(String initialDate, String finalDate) async{
    try {
-      final result = await datasource.getUserStatements();
+      final result = await datasource.getUserStatements(initialDate, finalDate);
       return Right(result);
     } catch (e) {
       return Left(Failure(message: e.toString()));

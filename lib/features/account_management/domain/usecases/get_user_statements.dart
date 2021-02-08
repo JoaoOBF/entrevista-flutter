@@ -4,7 +4,8 @@ import 'package:myapp/features/account_management/domain/entities/statement.dart
 import 'package:myapp/features/account_management/domain/repositories/account_management_repository.dart';
 
 abstract class GetUserStatements {
-  Future<Either<Failure, List<Statement>>> getUserStatements();
+  Future<Either<Failure, List<Statement>>> getUserStatements(
+      String initialDate, String finalDate);
 }
 
 class GetUserStatementsImpl implements GetUserStatements {
@@ -13,8 +14,9 @@ class GetUserStatementsImpl implements GetUserStatements {
   GetUserStatementsImpl(this.repository);
 
   @override
-  Future<Either<Failure, List<Statement>>> getUserStatements() async {
+  Future<Either<Failure, List<Statement>>> getUserStatements(
+      String initialDate, String finalDate) async {
     // TODO: implement getUserStatements
-    return await repository.getUserStatements();
+    return await repository.getUserStatements(initialDate, finalDate);
   }
 }

@@ -137,20 +137,25 @@ class _LoginPageState extends State<LoginPage> {
   _buttom() {
     return Observer(builder: (_) {
       return InkWell(
-         onTap: () => _controller.isValid ? _controller.login() : null,
+        onTap: () => _controller.isValid ? _controller.login() : null,
         child: new Container(
             width: MediaQuery.of(context).size.width,
             height: 45,
             decoration: BoxDecoration(
-              color:_controller.isValid ? AppColors.verde : AppColors.hint,
+              color: _controller.isValid ? AppColors.verde : AppColors.hint,
               borderRadius: BorderRadius.all(Radius.circular(30)),
             ),
             child: Center(
-                child: Text('ENTRAR',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16)))),
+                child: _controller.load
+                    ? CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
+                    : Text('ENTRAR',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16)))),
       );
     });
   }

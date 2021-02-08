@@ -8,7 +8,8 @@ import 'package:myapp/features/account_management/domain/entities/statement.dart
 
 abstract class AccountManagementDataSource {
   Future<Balance> getUserBalance();
-  Future<List<Statement>> getUserStatements();
+  Future<List<Statement>> getUserStatements(
+      String initialDate, String finalDate);
 }
 
 class AccountManagementDataSourceImpl implements AccountManagementDataSource {
@@ -29,9 +30,13 @@ class AccountManagementDataSourceImpl implements AccountManagementDataSource {
   }
 
   @override
-  Future<List<Statement>> getUserStatements() async {
+  Future<List<Statement>> getUserStatements(
+      String initialDate, String finalDate) async {
     final url = '/b2b/statement';
-    ApiResponse response = await client.get(url);
+    ApiResponse response = await client.get(url, querryParam: {
+      'initialDate': initialDate,
+      'finalDate': finalDate,
+    });
 
     if (response is Success) {
       return (response.data['statement'] as List)

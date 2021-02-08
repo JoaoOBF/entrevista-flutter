@@ -6,5 +6,5 @@ import 'package:myapp/features/account_management/domain/entities/statement.dart
 
 abstract class AccountManagementRepository {
   Future<Either<Failure, Balance>> getUserBalance();
-  Future<Either<Failure, List<Statement>>> getUserStatements();
+  Future<Either<Failure, List<Statement>>> getUserStatements(String initialDate, String finalDate);
 }
