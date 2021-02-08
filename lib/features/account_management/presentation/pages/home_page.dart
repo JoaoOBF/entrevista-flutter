@@ -104,33 +104,37 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 18)),
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Observer(builder: (_) {
-                              return GestureDetector(
-                                onTap: _selectDateNow,
-                                child: Text(
-                                  "De: ${Utils.dateToString(_controller.selectedDateNow, pattern: 'yyyy/MM/dd')}",
-                                ),
-                              );
-                            }),
+                        Flexible(
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Observer(builder: (_) {
+                                return GestureDetector(
+                                  onTap: _selectDateNow,
+                                  child: Text(
+                                    "De: ${Utils.dateToString(_controller.selectedDateNow, pattern: 'yyyy/MM/dd')}",
+                                  ),
+                                );
+                              }),
+                            ),
+                            decoration: filterDecoration(),
                           ),
-                          decoration: filterDecoration(),
                         ),
-                        GestureDetector(
-                            onTap: _selectDateLast,
-                            child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Observer(builder: (_) {
-                                  return Text(
-                                    "Até: ${Utils.dateToString(_controller.selectedDateLast, pattern: 'yyyy/MM/dd')}",
-                                  );
-                                }),
-                              ),
-                              decoration: filterDecoration(),
-                            )),
+                        Flexible(
+                          child: GestureDetector(
+                              onTap: _selectDateLast,
+                              child: Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Observer(builder: (_) {
+                                    return Text(
+                                      "Até: ${Utils.dateToString(_controller.selectedDateLast, pattern: 'yyyy/MM/dd')}",
+                                    );
+                                  }),
+                                ),
+                                decoration: filterDecoration(),
+                              )),
+                        ),
                       ],
                     ),
                     SizedBox(
