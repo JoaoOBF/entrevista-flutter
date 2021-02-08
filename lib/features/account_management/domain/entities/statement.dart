@@ -43,6 +43,8 @@ class Statement {
 
   bool isNegative() => this.amount < 0;
 
+  double inReal() => amount / 100;
+
   String formartMoney() {
     if (amount == null) {
       return '---';
@@ -50,6 +52,6 @@ class Statement {
 
     var simbolInBRFormat =
         new NumberFormat.currency(locale: "pt_BR", symbol: "R\$");
-    return simbolInBRFormat.format(amount / 100);
+    return simbolInBRFormat.format(inReal());
   }
 }

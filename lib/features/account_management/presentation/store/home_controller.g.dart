@@ -57,13 +57,13 @@ mixin _$HomeController on _HomeControllerBase, Store {
   final _$statementsAtom = Atom(name: '_HomeControllerBase.statements');
 
   @override
-  List<Statement> get statements {
+  Statements get statements {
     _$statementsAtom.reportRead();
     return super.statements;
   }
 
   @override
-  set statements(List<Statement> value) {
+  set statements(Statements value) {
     _$statementsAtom.reportWrite(value, super.statements, () {
       super.statements = value;
     });

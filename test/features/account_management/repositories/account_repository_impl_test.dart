@@ -6,6 +6,7 @@ import 'package:myapp/features/account_management/data/datasources/account_manag
 import 'package:myapp/features/account_management/data/repositories/account_management_repository_impl.dart';
 import 'package:myapp/features/account_management/domain/entities/balance.dart';
 import 'package:myapp/features/account_management/domain/entities/statement.dart';
+import 'package:myapp/features/account_management/domain/entities/statements.dart';
 import 'package:myapp/features/login/data/models/login_model.dart';
 import 'package:myapp/features/login/data/repositories/login_repository_impl.dart';
 import 'package:myapp/features/login/domain/entities/token.dart';
@@ -35,16 +36,16 @@ main() {
   });
 
    test('deve retornar as transações', () async {
-    when(datasource.getUserStatements()).thenAnswer((_) async => List<Statement>());
+    when(datasource.getUserStatements('','')).thenAnswer((_) async => Statements());
 
-    var result = await repository.getUserStatements();
-    expect(result | null, isA<List<Statement>>());
+    var result = await repository.getUserStatements('','');
+    expect(result | null, isA<Statements>());
   });
 
   test('deve retornar um Erro das transações', () async {
-    when(datasource.getUserStatements()).thenThrow(Exception());
+    when(datasource.getUserStatements('','')).thenThrow(Exception());
 
-    var result = await repository.getUserStatements();
+    var result = await repository.getUserStatements('','');
     expect(result.fold(id, id), isA<Failure>());
   });
 }

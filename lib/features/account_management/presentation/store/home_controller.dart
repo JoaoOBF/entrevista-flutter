@@ -1,9 +1,12 @@
 import 'package:mobx/mobx.dart';
 import 'package:myapp/core/utils/utils.dart';
 import 'package:myapp/features/account_management/domain/entities/balance.dart';
+import 'package:myapp/features/account_management/domain/entities/other_info.dart';
 import 'package:myapp/features/account_management/domain/entities/statement.dart';
+import 'package:myapp/features/account_management/domain/entities/statements.dart';
 import 'package:myapp/features/account_management/domain/usecases/get_user_balance.dart';
 import 'package:myapp/features/account_management/domain/usecases/get_user_statements.dart';
+import 'package:url_launcher/url_launcher.dart';
 part 'home_controller.g.dart';
 
 class HomeController = _HomeControllerBase with _$HomeController;
@@ -24,7 +27,7 @@ abstract class _HomeControllerBase with Store {
   Balance balance;
 
   @observable
-  List<Statement> statements = [];
+  Statements statements;
 
   @observable
   DateTime selectedDateNow = DateTime.utc(2019, 01, 01);
@@ -58,7 +61,7 @@ abstract class _HomeControllerBase with Store {
   @action
   filter() async {
     loadFilter = true;
-    statements = [];
+    statements = null;
     var statementsResult = await _getUserStatements.getUserStatements(
         Utils.dateToString(
           selectedDateNow,
@@ -71,5 +74,19 @@ abstract class _HomeControllerBase with Store {
     }, (statementsResult) {
       this.statements = statementsResult;
     });
+  }
+
+  openLocation(OtherInfo otherInfo) async {
+    final String googleMapslocationUrl =
+        "https://www.google.com/maps/search/?api=1&query=${otherInfo.userLatitude},${otherInfo.userLogintude}";
+
+    final String encodedURl = Uri.encodeFull(googleMapslocationUrl);
+
+    if (await canLaunch(encodedURl)) {
+      await launch(encodedURl);
+    } else {
+      print('Could not launch $encodedURl');
+      throw 'Could not launch $encodedURl';
+    }
   }
 }

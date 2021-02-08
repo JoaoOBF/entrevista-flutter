@@ -7,6 +7,7 @@ import 'package:myapp/core/utils/utils.dart';
 import 'package:myapp/features/account_management/data/models/statement_model.dart';
 import 'package:myapp/features/account_management/domain/entities/statement.dart';
 import 'package:myapp/features/account_management/presentation/store/home_controller.dart';
+import 'package:myapp/features/account_management/presentation/widgets/chart_balance.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    //  _controller.getData();
     return Scaffold(
       backgroundColor: AppColors.verde,
       body: _body(),
@@ -160,79 +162,25 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         }
-        if (_controller.statements.length == 0) {
+
+        if (_controller.statements == null ||
+            !_controller.statements.isValid()) {
           return Center(
             child: Text("Nenhum extrato registrado"),
           );
         }
 
         return Column(
-          children:
-              _controller.statements.map<Widget>((e) => _listItem(e)).toList(),
+          children: [
+            ChartBalance(_controller.statements),
+            Column(
+              children: _controller.statements.statements
+                  .map<Widget>((e) => _item(e))
+                  .toList(),
+            ),
+          ],
         );
       }),
-    );
-  }
-
-  _listItem(Statement model) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.white, border: Border.all(color: AppColors.cinzaBorda)),
-      margin: EdgeInsets.only(top: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height * 0.080,
-            width: 5,
-            decoration: BoxDecoration(
-              borderRadius: new BorderRadius.circular(10.0),
-              color: model.isNegative() ? Colors.red : Colors.green,
-            ),
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Flexible(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text("${model.dateFormat()}"),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text("${model.formartMoney()}",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18)),
-                    ],
-                  ),
-                ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("${model.operationTypeFormat()}",
-                        style: TextStyle(
-                            color: AppColors.verde,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -267,5 +215,167 @@ class _HomePageState extends State<HomePage> {
       _controller.selectedDateLast = picked;
       _controller.filter();
     }
+  }
+
+  Future _showBottomSheet(String txt) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+              child: SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 5.0, top: 10),
+                  child: Text(
+                    txt,
+                    textAlign: TextAlign.center,
+                  )),
+            ),
+          ));
+        });
+  }
+
+  _item(Statement model) {
+    return Theme(
+      data: ThemeData(
+        primarySwatch: Colors.grey,
+      ),
+      child: ExpansionTile(
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height * 0.080,
+              width: 5,
+              decoration: BoxDecoration(
+                borderRadius: new BorderRadius.circular(10.0),
+                color: model.isNegative() ? Colors.red : Colors.green,
+              ),
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Flexible(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text("${model.dateFormat()}"),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text("${model.formartMoney()}",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18)),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("${model.operationTypeFormat()}",
+                          style: TextStyle(
+                              color: AppColors.verde,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        children: <Widget>[
+          SizedBox(
+            height: 15,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              model.otherInfo.showCupom()
+                  ? GestureDetector(
+                      onTap: () =>
+                          _showBottomSheet(model.otherInfo.formartCupom()),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.verde),
+                          borderRadius: BorderRadius.all(Radius.circular(
+                                  5.0) //         <--- border radius here
+                              ),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.library_books_sharp,
+                                  color: AppColors.verde,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text('COMPROVANTE',
+                                    style: TextStyle(
+                                        color: AppColors.verde,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14)),
+                              ],
+                            )),
+                      ),
+                    )
+                  : Container(),
+              SizedBox(
+                width: 15,
+              ),
+              model.otherInfo.showLocation()
+                  ? GestureDetector(
+                      onTap: () => _controller.openLocation(model.otherInfo),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.verde,
+                          borderRadius: BorderRadius.all(Radius.circular(
+                                  5.0) //         <--- border radius here
+                              ),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on_rounded,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text('LOCALIZAÇÃO',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14)),
+                              ],
+                            )),
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
+          SizedBox(
+            height: 15,
+          ),
+        ],
+      ),
+    );
   }
 }
